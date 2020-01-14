@@ -28,7 +28,7 @@ c     %-----------------%
 c     %----------------------%
 c     | External Subroutines |
 c     %----------------------%
-      external sscal,slascl
+      external psscal,slascl
 
 c     %--------------------%
 c     | External Functions |
