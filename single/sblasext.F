@@ -154,10 +154,10 @@ c$OMP& schedule(static)
       real function psnrm2(n, x, incx)
       implicit none
       integer n, incx
-      real x(*), snrm2
-      external snrm2
+      real x(*), snrm2_64
+      external snrm2_64
 
-      psnrm2 = snrm2(n, x, incx)
+      psnrm2 = snrm2_64(n, x, incx)
       end
 
       subroutine psscal(n, alpha, x , incx)
@@ -165,7 +165,7 @@ c$OMP& schedule(static)
       integer n, incx
       real alpha,x(*)
 
-      call sscal(n, alpha, x , incx)
+      call sscal_64(n, alpha, x , incx)
       end
 
       subroutine pscopy(n, x , incx, y, incy)
@@ -173,7 +173,7 @@ c$OMP& schedule(static)
       integer n, incx, incy
       real x(*),y(*)
 
-      call scopy(n, x , incx, y, incy)
+      call scopy_64(n, x , incx, y, incy)
       end
 
       subroutine psaxpy(n, alpha, x , incx, y, incy)
@@ -181,17 +181,17 @@ c$OMP& schedule(static)
       integer n, incx, incy
       real alpha,x(*),y(*)
      
-      call saxpy(n, alpha, x , incx, y, incy)
+      call saxpy_64(n, alpha, x , incx, y, incy)
       end
 
       
       real function psdot(n, x , incx, y, incy)
       implicit none
       integer n, incx, incy
-      real x(*),y(*),sdot
-      external sdot
+      real x(*),y(*),sdot_64
+      external sdot_64
       
-      psdot = sdot(n, x , incx, y, incy)
+      psdot = sdot_64(n, x , incx, y, incy)
       end
 #endif
 

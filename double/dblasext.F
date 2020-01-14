@@ -154,10 +154,10 @@ c$OMP& schedule(static)
       double precision function pdnrm2(n, x, incx)
       implicit none
       integer n, incx
-      double precision x(*), dnrm2
-      external dnrm2
+      double precision x(*), dnrm2_64
+      external dnrm2_64
 
-      pdnrm2 = dnrm2(n, x, incx)
+      pdnrm2 = dnrm2_64(n, x, incx)
       end
 
       subroutine pdscal(n, alpha, x , incx)
@@ -165,7 +165,7 @@ c$OMP& schedule(static)
       integer n, incx
       double precision alpha,x(*)
 
-      call dscal(n, alpha, x , incx)
+      call dscal_64(n, alpha, x , incx)
       end
 
       subroutine pdcopy(n, x , incx, y, incy)
@@ -173,7 +173,7 @@ c$OMP& schedule(static)
       integer n, incx, incy
       double precision x(*),y(*)
 
-      call dcopy(n, x , incx, y, incy)
+      call dcopy_64(n, x , incx, y, incy)
       end
 
       subroutine pdaxpy(n, alpha, x , incx, y, incy)
@@ -181,17 +181,17 @@ c$OMP& schedule(static)
       integer n, incx, incy
       double precision alpha,x(*),y(*)
 
-      call daxpy(n, alpha, x , incx, y, incy)
+      call daxpy_64(n, alpha, x , incx, y, incy)
       end
 
 
       double precision function pddot(n, x , incx, y, incy)
       implicit none
       integer n, incx, incy
-      double precision x(*),y(*),ddot
-      external ddot
+      double precision x(*),y(*),ddot_64
+      external ddot_64
 
-      pddot = ddot(n, x , incx, y, incy)
+      pddot = ddot_64(n, x , incx, y, incy)
       end
 #endif
 

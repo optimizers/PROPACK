@@ -28,13 +28,13 @@ c     %-----------------%
 c     %----------------------%
 c     | External Subroutines |
 c     %----------------------%
-      external psscal,slascl
+      external psscal,slascl_64
 
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      real slamch
-      external slamch
+      real slamch_64
+      external slamch_64
 
 c     %-----------------%
 c     | Data statements |
@@ -43,13 +43,13 @@ c     %-----------------%
       data sfmin /-1.0/
       
       if (sfmin.eq.-1.0) then         
-         sfmin = slamch('s')
+         sfmin = slamch_64('s')
       endif
 
       if (abs(alpha).ge.sfmin) then
          call psscal(n,one/alpha, x, 1)
       else
-         call slascl('General',i,i,alpha,one,n,1,x,n,info)
+         call slascl_64('General',i,i,alpha,one,n,1,x,n,info)
       endif
       
       end

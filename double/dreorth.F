@@ -176,7 +176,7 @@ c     Classical Gram-Schmidt: vnew = vnew - V(:,p:q)*(V(:,p:q)'*vnew)
             if (tid.eq.nt-1) then
                cnk = n-st+1
             endif
-            call dgemv('T',cnk,l,one,V(st,p),ld,vnew(st),1,zero,
+            call dgemv_64('T',cnk,l,one,V(st,p),ld,vnew(st),1,zero,
      c           ylocal,1)
 
             if (tid.eq.0) then
@@ -193,7 +193,7 @@ c$OMP CRITICAL
 c$OMP END CRITICAL
             endif
 c$OMP BARRIER
-            call dgemv('N',cnk,l,-one,V(st,p),ld,work,1,zero,
+            call dgemv_64('N',cnk,l,-one,V(st,p),ld,work,1,zero,
      c           ylocal,1)
             do j=1,cnk
                vnew(st+j-1) = vnew(st+j-1) + ylocal(j)

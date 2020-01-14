@@ -39,9 +39,9 @@ c     %-----------------%
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      logical lsame
+      logical lsame_64
       real pscnrm2
-      external pscnrm2,lsame
+      external pscnrm2,lsame_64
 
 c-------------------- Here begins executable code ---------------------
 
@@ -51,7 +51,7 @@ c-------------------- Here begins executable code ---------------------
       iseed(3) = 5
       iseed(4) = 7
 
-      if (lsame(transa,'n')) then
+      if (lsame_64(transa,'n')) then
 c     %-------------------------%
 c     | u0 is to be an m-vector |
 c     %-------------------------%
@@ -68,7 +68,7 @@ c     %-------------------------%
       idist = 2
       ierr = 0
       do itry=1,ntry
-         call clarnv(idist, iseed, rsize, work)
+         call clarnv_64(idist, iseed, rsize, work)
          nrm = pscnrm2(rsize,work,1)
          call second(t2)
          call aprod(transa,m,n,work,u0,dparm,iparm)

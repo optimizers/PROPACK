@@ -119,15 +119,15 @@ c     %-----------------%
 c     %----------------------%
 c     | External Subroutines |
 c     %----------------------%
-      external dzero,izero,dcopy,daxpy,dbdsqr,dgemm
+      external dzero,izero,dcopy_64,daxpy,dbdsqr_64,dgemm
 
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      logical lsame
-      double precision dlamch,pdnrm2,ddot,dlapy2
-      external pdnrm2,ddot,lsame
-      external dlamch,dlapy2
+      logical lsame_64
+      double precision dlamch_64,pdnrm2,ddot,dlapy2_64
+      external pdnrm2,ddot,lsame_64
+      external dlamch_64,dlapy2_64
 
 c-------------------- Here begins executable code ---------------------
 
@@ -139,11 +139,11 @@ c     %-------------%
 c     %---------------------------------%
 c     | Set machine dependent constants |
 c     %---------------------------------%
-      eps = dlamch('e')
+      eps = dlamch_64('e')
       eps34 = eps**(3.0/4.0)
       epsn = dble(max(m,n))*eps/2.0
       epsn2 = sqrt(dble(max(m,n)))*eps/2.0
-      sfmin = dlamch('s')
+      sfmin = dlamch_64('s')
 
 
 c     %--------------------------------%
@@ -196,13 +196,13 @@ c     %---------------------------------------------------%
 c     %---------------------------------------------%
 c     | Compute and analyze SVD(B) and error bounds |
 c     %---------------------------------------------%
-         call dcopy(2*lanmax, work(ib),1,work(ib1),1)
+         call dcopy_64(2*lanmax, work(ib),1,work(ib1),1)
          call dzero(j+1,work(ibnd),1)
 
          call second(t2)
          call dbdqr((j.eq.min(m,n)),'N',j,work(ib1),work(ib1+lanmax),
      c        work(ibnd+j-1),work(ibnd+j),work(ip),lanmax+1)
-         call dbdsqr('u',j,0,1,0,work(ib1),work(ib1+lanmax),work,1,
+         call dbdsqr_64('u',j,0,1,0,work(ib1),work(ib1+lanmax),work,1,
      c        work(ibnd),1,work,1,work(iwrk),lapinfo)
          call  second(t3)
          tbsvd = tbsvd + (t3-t2)
@@ -220,7 +220,7 @@ c     %---------------------------------------------%
 c     %---------------------------------------------%
 c     | Refine error bounds using the "Gap theorem" |
 c     %---------------------------------------------%
-c         if (lsame(jobu,'n') .and. lsame(jobv,'n')) then
+c         if (lsame_64(jobu,'n') .and. lsame_64(jobv,'n')) then
             call drefinebounds(min(m,n),j,work(ib1),work(ibnd),
      c           epsn*anorm,eps34)
 c         endif
@@ -285,7 +285,7 @@ c     %----------------------------------------------------%
       enddo
 
  50   if ((neig.ge.k .or. info.gt.0)  .and.
-     c     (lsame(jobu,'y') .or. lsame(jobv,'y'))) then
+     c     (lsame_64(jobu,'y') .or. lsame_64(jobv,'y'))) then
 c     %-----------------------------------------%
 c     | Calculate singular vectors if requested %
 c     %-----------------------------------------%

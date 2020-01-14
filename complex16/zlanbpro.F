@@ -139,10 +139,10 @@ c     %----------------------%
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      double precision dlamch,pdnrm2,pddot,dlapy2,pdznrm2
+      double precision dlamch_64,pdnrm2,pddot,dlapy2_64,pdznrm2
       complex*16 pzdotc
       external pdnrm2,pddot,pdznrm2,pzdotc
-      external dlamch,dlapy2
+      external dlamch_64,dlapy2_64
 
 c-------------------- Here begins executable code ---------------------
       call second(t1)
@@ -150,11 +150,11 @@ c-------------------- Here begins executable code ---------------------
 c     %---------------------------------%
 c     | Set machine dependent constants |
 c     %---------------------------------%
-      eps = dlamch('e')
+      eps = dlamch_64('e')
       eps34 = eps**(3d0/4d0)
       epsn = dble(max(m,n))*eps
       epsn2 = sqrt(dble(max(m,n)))*eps
-      sfmin = dlamch('s')
+      sfmin = dlamch_64('s')
       
 c     %------------------------%
 c     | Set default parameters |
@@ -177,7 +177,7 @@ c     %------------------------%
       if (doption(3).gt.zero) then
          anorm = doption(3)
       else if (k0.gt.0) then
-         anorm = dlapy2(B(1,1),B(1,2))
+         anorm = dlapy2_64(B(1,1),B(1,2))
          if (anorm.le.zero) then
             ierr = -1
             goto 9999         
@@ -492,7 +492,7 @@ c     %----------------------------%
 c     | Update estimate of ||A||_2 |         
 c     %----------------------------%
          if (j.le.1) then
-            a1 = dlapy2(B(1,1), B(1,2))
+            a1 = dlapy2_64(B(1,1), B(1,2))
          else
             a1 = B(j,1)/amax
             a1 = amax*sqrt(a1**2 + (B(j,2)/amax)**2 +
@@ -704,29 +704,29 @@ c     %-----------------%
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      double precision dlamch,dlapy2
-      external dlamch,dlapy2
+      double precision dlamch_64,dlapy2_64
+      external dlamch_64,dlapy2_64
 
       call second(t1)
       if (j.eq.1) then
-         d = eps1*(dlapy2(alpha(j), beta(j)) + alpha(1)) + eps1*anorm
+         d = eps1*(dlapy2_64(alpha(j), beta(j)) + alpha(1)) + eps1*anorm
          mu(1) = eps1/beta(1)
          mumax = abs(mu(1))
       else
          mu(1) = alpha(1)*nu(1)-alpha(j)*mu(1)
-         d = eps1*(dlapy2(alpha(j), beta(j)) + alpha(1)) + eps1*anorm
+         d = eps1*(dlapy2_64(alpha(j), beta(j)) + alpha(1)) + eps1*anorm
          mu(1) = (mu(1) + dsign(d,mu(1))) / beta(j)
          mumax = abs(mu(1))
          do k=2,j-1
             mu(k) = alpha(k)*nu(k) +beta(k-1)*nu(k-1)-alpha(j)*mu(k)
-            d = eps1*(dlapy2(alpha(j), beta(j)) + 
-     c           dlapy2(alpha(k), beta(k-1))) + eps1*anorm
+            d = eps1*(dlapy2_64(alpha(j), beta(j)) + 
+     c           dlapy2_64(alpha(k), beta(k-1))) + eps1*anorm
             mu(k) = (mu(k) + dsign(d,mu(k))) / beta(j)
             mumax = max(mumax,abs(mu(k)))
          enddo
          mu(j) = beta(j-1)*nu(j-1)
-         d = eps1*(dlapy2(alpha(j), beta(j)) + 
-     c        dlapy2(alpha(j), beta(j-1))) + eps1*anorm
+         d = eps1*(dlapy2_64(alpha(j), beta(j)) + 
+     c        dlapy2_64(alpha(j), beta(j-1))) + eps1*anorm
          mu(j) = (mu(j) + sign(d,mu(j))) / beta(j)
          mumax = max(mumax,abs(mu(j)))
       endif
@@ -764,16 +764,16 @@ c     %-----------------%
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      double precision dlamch,dlapy2
-      external dlamch,dlapy2
+      double precision dlamch_64,dlapy2_64
+      external dlamch_64,dlapy2_64
 
       call second(t1)
       if (j.gt.1) then
          numax = zero
          do k=1,j-1
             nu(k) = beta(k)*mu(k+1) + alpha(k)*mu(k) -beta(j-1)*nu(k)
-            d = eps1*(dlapy2(alpha(k),beta(k)) +
-     c           dlapy2(alpha(j),beta(j-1))) + eps1*anorm
+            d = eps1*(dlapy2_64(alpha(k),beta(k)) +
+     c           dlapy2_64(alpha(j),beta(j-1))) + eps1*anorm
             nu(k) = (nu(k) + dsign(d,nu(k))) / alpha(j)
             numax = max(numax,abs(nu(k)))
          enddo

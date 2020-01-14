@@ -29,13 +29,13 @@ c     %-----------------%
 c     %----------------------%
 c     | External Subroutines |
 c     %----------------------%
-      external pzdscal,zlascl
+      external pzdscal,zlascl_64
 
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      double precision dlamch
-      external dlamch
+      double precision dlamch_64
+      external dlamch_64
 
 c     %-----------------%
 c     | Data statements |
@@ -44,13 +44,13 @@ c     %-----------------%
       data sfmin /-1d0/
       
       if (sfmin.eq.-1d0) then         
-         sfmin = dlamch('s')
+         sfmin = dlamch_64('s')
       endif
 
       if (abs(alpha).ge.sfmin) then
          call pzdscal(n,one/alpha, x, 1)
       else
-         call zlascl('General',i,i,alpha,one,n,1,x,n,info)
+         call zlascl_64('General',i,i,alpha,one,n,1,x,n,info)
       endif
       
       end

@@ -234,10 +234,10 @@ c
       implicit none
       integer n, incx
       complex*16 x(*)
-      double precision dznrm2
-      external dznrm2
+      double precision dznrm2_64
+      external dznrm2_64
 
-      pdznrm2 = dznrm2(n, x, incx)
+      pdznrm2 = dznrm2_64(n, x, incx)
       end
 c
 c****************************************************************************
@@ -249,7 +249,7 @@ c
       integer n, incx
       complex*16 alpha,x(*)
 
-      call zscal(n, alpha, x , incx)
+      call zscal_64(n, alpha, x , incx)
       end
 
 c
@@ -262,7 +262,7 @@ c
       double precision alpha
       complex*16 x(*)
 
-      call zdscal(n, alpha, x , incx)
+      call zdscal_64(n, alpha, x , incx)
       end
 
 c
@@ -274,7 +274,7 @@ c
       integer n, incx, incy
       complex*16 x(*),y(*)
 
-      call zcopy(n, x , incx, y, incy)
+      call zcopy_64(n, x , incx, y, incy)
       end
 c
 c****************************************************************************
@@ -285,7 +285,7 @@ c
       integer n, incx, incy
       complex*16 alpha,x(*),y(*)
      
-      call zaxpy(n, alpha, x , incx, y, incy)
+      call zaxpy_64(n, alpha, x , incx, y, incy)
       end
 
       subroutine pzdaxpy(n, alpha, x , incx, y, incy)
@@ -320,10 +320,10 @@ c
       integer n, incx, incy
       complex*16 x(*),y(*)
 #ifndef __APPLE__
-      complex*16 zdotc
-      external zdotc
+      complex*16 zdotc_64
+      external zdotc_64
 
-      pzdotc = zdotc(n, x , incx, y, incy)
+      pzdotc = zdotc_64(n, x , incx, y, incy)
 #else
       integer i
       pzdotc = (0.0,0.0)
@@ -344,10 +344,10 @@ c
       integer n, incx, incy
       complex*16 x(*),y(*)
 #ifndef __APPLE__
-      complex*16 zdotu
-      external zdotu
+      complex*16 zdotu_64
+      external zdotu_64
       
-      pzdotu = zdotu(n, x , incx, y, incy)
+      pzdotu = zdotu_64(n, x , incx, y, incy)
 #else
       integer i
       pzdotu = (0.0,0.0)

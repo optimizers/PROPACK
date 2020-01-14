@@ -234,10 +234,10 @@ c
       implicit none
       integer n, incx
       complex x(*)
-      real scnrm2
-      external scnrm2
+      real scnrm2_64
+      external scnrm2_64
 
-      pscnrm2 = scnrm2(n, x, incx)
+      pscnrm2 = scnrm2_64(n, x, incx)
       end
 c
 c****************************************************************************
@@ -249,7 +249,7 @@ c
       integer n, incx
       complex alpha,x(*)
 
-      call cscal(n, alpha, x , incx)
+      call cscal_64(n, alpha, x , incx)
       end
 
 c
@@ -262,7 +262,7 @@ c
       real alpha
       complex x(*)
 
-      call csscal(n, alpha, x , incx)
+      call csscal_64(n, alpha, x , incx)
       end
 
 c
@@ -274,7 +274,7 @@ c
       integer n, incx, incy
       complex x(*),y(*)
 
-      call ccopy(n, x , incx, y, incy)
+      call ccopy_64(n, x , incx, y, incy)
       end
 c
 c****************************************************************************
@@ -285,7 +285,7 @@ c
       integer n, incx, incy
       complex alpha,x(*),y(*)
      
-      call caxpy(n, alpha, x , incx, y, incy)
+      call caxpy_64(n, alpha, x , incx, y, incy)
       end
 
       subroutine pcsaxpy(n, alpha, x , incx, y, incy)
@@ -320,9 +320,9 @@ c
       integer n, incx, incy
       complex x(*),y(*)
 #ifndef __APPLE__
-      complex cdotc
-      external cdotc
-      pcdotc = cdotc(n, x , incx, y, incy)
+      complex cdotc_64
+      external cdotc_64
+      pcdotc = cdotc_64(n, x , incx, y, incy)
 #else
       integer i
       pcdotc = (0.0,0.0)
@@ -343,9 +343,9 @@ c
       integer n, incx, incy
       complex x(*),y(*)
 #ifndef __APPLE__
-      complex cdotu
-      external cdotu
-      pcdotu = cdotu(n, x , incx, y, incy)
+      complex cdotu_64
+      external cdotu_64
+      pcdotu = cdotu_64(n, x , incx, y, incy)
 #else
       integer i
       pcdotu = (0.0,0.0)
@@ -722,23 +722,23 @@ c
       end
 
 #ifdef BLAH
-      complex function cdotc(n, cx, incx, cy, incy)
+      complex function cdotc_64(n, cx, incx, cy, incy)
       complex cx(*), cy(*), c
       integer n, incx, incy
 
-      call cblas_cdotc_sub(%val(n), cx, %val(incx), cy, %val(incy), c)
+      call cblas_cdotc_64_sub(%val(n), cx, %val(incx), cy, %val(incy), c)
 
-      cdotc = c
+      cdotc_64 = c
       return
       end
 
-      complex function cdotu(n, cx, incx, cy, incy)
+      complex function cdotu_64(n, cx, incx, cy, incy)
       complex cx(*), cy(*), c
       integer n, incx, incy
 
-      call cblas_cdotu_sub(%val(n), cx, %val(incx), cy, %val(incy), c)
+      call cblas_cdotu_64_sub(%val(n), cx, %val(incx), cy, %val(incy), c)
 
-      cdotu = c
+      cdotu_64 = c
       return
       end
 #endif

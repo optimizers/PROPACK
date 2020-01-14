@@ -97,10 +97,10 @@ c
       complex*16 CC(blksz,blksz)
       double precision BB(blksz,blksz),btmp
       common/BBcom/BB,CC
-      logical lsame
-      external lsame
+      logical lsame_64
+      external lsame_64
 
-      if (lsame('T',transb)) then
+      if (lsame_64('T',transb)) then
 c
 c     C = A*B^T
 c        

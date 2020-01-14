@@ -120,15 +120,15 @@ c     %-----------------%
 c     %----------------------%
 c     | External Subroutines |
 c     %----------------------%
-      external szero,izero,scopy,sbdsqr
+      external szero,izero,scopy_64,sbdsqr_64
       
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      logical lsame
-      real slamch,psnrm2
-      external psnrm2,lsame
-      external slamch
+      logical lsame_64
+      real slamch_64,psnrm2
+      external psnrm2,lsame_64
+      external slamch_64
 
 c-------------------- Here begins executable code ---------------------
       
@@ -140,11 +140,11 @@ c     %-------------%
 c     %---------------------------------%
 c     | Set machine dependent constants |
 c     %---------------------------------%
-      eps = slamch('e')
+      eps = slamch_64('e')
       eps34 = eps**(3.0/4.0)
       epsn = dble(max(m,n))*eps/2.0
       epsn2 = sqrt(dble(max(m,n)))*eps/2.0
-      sfmin = slamch('s')
+      sfmin = slamch_64('s')
       
 
 c     %--------------------------------%
@@ -196,13 +196,13 @@ c     %---------------------------------------------------%
 c     %---------------------------------------------%
 c     | Compute and analyze SVD(B) and error bounds |
 c     %---------------------------------------------%
-         call scopy(2*lanmax, work(ib),1,work(ib1),1)
+         call scopy_64(2*lanmax, work(ib),1,work(ib1),1)
          call szero(j+1,work(ibnd),1)
          
          call second(t2)
          call sbdqr((j.eq.min(m,n)),'N',j,work(ib1),work(ib1+lanmax),
      c        work(ibnd+j-1),work(ibnd+j),work(ip),lanmax+1)
-         call sbdsqr('u',j,0,1,0,work(ib1),work(ib1+lanmax),work,1,
+         call sbdsqr_64('u',j,0,1,0,work(ib1),work(ib1+lanmax),work,1,
      c        work(ibnd),1,work,1,work(iwrk),lapinfo)
          call  second(t3)
          tbsvd = tbsvd + (t3-t2)
@@ -220,7 +220,7 @@ c     %---------------------------------------------%
 c     %---------------------------------------------%
 c     | Refine error bounds using the "Gap theorem" |
 c     %---------------------------------------------%
-c         if (lsame(jobu,'n') .and. lsame(jobv,'n')) then
+c         if (lsame_64(jobu,'n') .and. lsame_64(jobv,'n')) then
             call srefinebounds(min(m,n),j,work(ib1),work(ibnd),
      c           epsn*anorm,eps34)
 c         endif
@@ -285,7 +285,7 @@ c     %----------------------------------------------------%
       enddo
 
  50   if ((neig.ge.k .or. info.gt.0)  .and. 
-     c     (lsame(jobu,'y') .or. lsame(jobv,'y'))) then
+     c     (lsame_64(jobu,'y') .or. lsame_64(jobv,'y'))) then
 c     %-----------------------------------------%
 c     | Calculate singular vectors if requested %
 c     %-----------------------------------------%

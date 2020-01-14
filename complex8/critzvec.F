@@ -76,8 +76,8 @@ c     %-----------------%
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      logical lsame
-      external lsame, sbdqr, sbdsdc, csgemm_ovwr_left, sgemm_ovwr
+      logical lsame_64
+      external lsame_64, sbdqr, sbdsdc_64, csgemm_ovwr_left, sgemm_ovwr
 #ifdef _OPENMP
       integer omp_get_thread_num, omp_get_num_threads
       external omp_get_thread_num, omp_get_num_threads
@@ -118,7 +118,7 @@ c     | Compute SVD of R:
 c     |      R = P * S * Q^T, 
 c     | using the Divide-and-conquer SVD
 c     %-----------------------------------------%
-      call sbdsdc('u','I',dim,D,E,work(ip),dim,work(iqt),dim,dd,id,
+      call sbdsdc_64('u','I',dim,D,E,work(ip),dim,work(iqt),dim,dd,id,
      c     work(iwrk),iwork,info)
 
 c     %-----------------------------------------%
@@ -129,12 +129,12 @@ c     %-----------------------------------------%
      c     work(imt),dim+1,work(iwrk),lwrk)
       
       
-      if (lsame(jobu,'y')) then
+      if (lsame_64(jobu,'y')) then
 c     %-----------------------------------------%
 c     | Form left Ritz-vectors                  |
 c     |   U = U * X^T                           |
 c     %-----------------------------------------%
-         if (lsame(which,'s')) then
+         if (lsame_64(which,'s')) then
             mstart = dim-k+1
          else
             mstart = 1
@@ -161,8 +161,8 @@ c$OMP PARALLEL private(tid,nt,cnk,st,wcnk,wst)
 c$OMP END PARALLEL 
       endif
 
-      if (lsame(jobv,'y')) then
-         if (lsame(which,'s')) then
+      if (lsame_64(jobv,'y')) then
+         if (lsame_64(which,'s')) then
             mstart = dim-k+1
          else
             mstart = 1

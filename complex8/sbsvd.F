@@ -28,15 +28,15 @@ c     %-----------------%
       real c,s,x,y,r
       logical dou,dov
 
-      logical lsame
-      external lsame,slartg,srot
+      logical lsame_64
+      external lsame_64,slartg_64,srot_64
       
 c-------------------- Here begins executable code ---------------------
 
       if (k.le.1) return
 
-      dou = lsame(jobu,'y')
-      dov = lsame(jobv,'y')
+      dou = lsame_64(jobu,'y')
+      dov = lsame_64(jobv,'y')
 
 c     Compute the initial rotation based on B*B^T-sigma^2
       x = D(1)*D(1) - sigma*sigma
@@ -46,9 +46,9 @@ c     Chase the "bulge" down the lower bidiagonal with Givens rotations.
 c     Below 'y' is the "bulge" and 'x' is the element used to eliminate it.
       do i=1,k-1
         if (i.gt.1) then
-           call slartg(x,y,c,s,E(i-1))
+           call slartg_64(x,y,c,s,E(i-1))
         else
-           call slartg(x,y,c,s,r)
+           call slartg_64(x,y,c,s,r)
         endif
         x = c*D(i) + s*E(i)
         E(i) = -s*D(i) + c*E(i)
@@ -57,10 +57,10 @@ c     Below 'y' is the "bulge" and 'x' is the element used to eliminate it.
         D(i+1) = c*D(i+1)
 
         if (dou .and. m.gt.0) then
-           call srot(m,U(1,i),1,U(1,i+1),1,c,s)
+           call srot_64(m,U(1,i),1,U(1,i+1),1,c,s)
         endif
 
-        call slartg(x,y,c,s,D(i))
+        call slartg_64(x,y,c,s,D(i))
         x = c*E(i) + s*D(i+1)
         D(i+1) = -s*E(i) + c*D(i+1)
         E(i) = x
@@ -68,15 +68,15 @@ c     Below 'y' is the "bulge" and 'x' is the element used to eliminate it.
         E(i+1) = c*E(i+1)
 
         if (dov .and. n.gt.0) then
-           call srot(n,V(1,i),1,V(1,i+1),1,c,s)
+           call srot_64(n,V(1,i),1,V(1,i+1),1,c,s)
         endif
       enddo
-      call slartg(x,y,c,s,E(k-1))
+      call slartg_64(x,y,c,s,E(k-1))
       x = c*D(k) + s*E(k)
       E(k) = -s*D(k) + c*E(k)
       D(k) = x
       if (dou .and. m.gt.0) then
-         call srot(m,U(1,k),1,U(1,k+1),1,c,s)
+         call srot_64(m,U(1,k),1,U(1,k+1),1,c,s)
       endif
       return
       end
@@ -111,13 +111,13 @@ c     %-----------------%
 c     %------------------------------------%
 c     | External Functions and Subroutines |
 c     %------------------------------------%
-      logical lsame
-      external lsame
+      logical lsame_64
+      external lsame_64
 
 c-------------------- Here begins executable code ---------------------
 
       if (n.lt.1) return
-      if (lsame(jobq,'Y')) then
+      if (lsame_64(jobq,'Y')) then
          do j=1,n+1
             do i=1,n+1
                Qt(i,j) = 0.0
@@ -126,11 +126,11 @@ c-------------------- Here begins executable code ---------------------
          enddo
       endif
       do i=1,n-1
-         call slartg(d(i),e(i),cs,sn,r)
+         call slartg_64(d(i),e(i),cs,sn,r)
          d(i) = r
          e(i) = sn*d(i+1)
          d(i+1) = cs*d(i+1)
-         if (lsame(jobq,'Y')) then
+         if (lsame_64(jobq,'Y')) then
             do j=1,i
                Qt(i+1,j) = -sn*Qt(i,j)
                Qt(i,j) = cs*Qt(i,j)
@@ -140,12 +140,12 @@ c-------------------- Here begins executable code ---------------------
          endif
       enddo
       if (.not.ignorelast) then
-         call slartg(d(n),e(n),cs,sn,r)
+         call slartg_64(d(n),e(n),cs,sn,r)
          d(n) = r
          e(n) = 0.0
          c1 = sn
          c2 = cs
-         if (lsame(jobq,'Y')) then
+         if (lsame_64(jobq,'Y')) then
             do j=1,i
                Qt(i+1,j) = -sn*Qt(i,j)
                Qt(i,j) = cs*Qt(i,j)
@@ -187,8 +187,8 @@ c     %-----------------%
 c     %------------------------------------%
 c     | External Functions and Subroutines |
 c     %------------------------------------%
-      real slapy2
-      external slapy2
+      real slapy2_64
+      external slapy2_64
 
 c-------------------- Here begins executable code ---------------------
       if (k.le.1) return
@@ -197,7 +197,7 @@ c-------------------- Here begins executable code ---------------------
             if ((l.eq.1.and.i.lt.k) .or. (l.eq.-1.and.i.gt.1)) then
                if (abs(theta(i)-theta(i+l)) .lt. eps34*(theta(i))) then
                   if (bound(i).gt.tol .and. bound(i+l).gt.tol) then
-                     bound(i+l) = slapy2(bound(i),bound(i+l))
+                     bound(i+l) = slapy2_64(bound(i),bound(i+l))
                      bound(i) = 0.0
                   endif
                endif

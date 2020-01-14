@@ -29,13 +29,13 @@ c     %-----------------%
 c     %----------------------%
 c     | External Subroutines |
 c     %----------------------%
-      external pcsscal,clascl
+      external pcsscal,clascl_64
 
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      real slamch
-      external slamch
+      real slamch_64
+      external slamch_64
 
 c     %-----------------%
 c     | Data statements |
@@ -44,13 +44,13 @@ c     %-----------------%
       data sfmin /-1d0/
       
       if (sfmin.eq.-1d0) then         
-         sfmin = slamch('s')
+         sfmin = slamch_64('s')
       endif
 
       if (abs(alpha).ge.sfmin) then
          call pcsscal(n,one/alpha, x, 1)
       else
-         call clascl('General',i,i,alpha,one,n,1,x,n,info)
+         call clascl_64('General',i,i,alpha,one,n,1,x,n,info)
       endif
       
       end

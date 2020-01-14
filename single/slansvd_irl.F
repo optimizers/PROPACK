@@ -139,15 +139,15 @@ c     %-----------------%
 c     %----------------------%
 c     | External Subroutines |
 c     %----------------------%
-      external szero,izero,scopy,sbdsqr
+      external szero,izero,scopy_64,sbdsqr_64
       
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      logical lsame
-      real slamch,psnrm2
-      external psnrm2,lsame
-      external slamch
+      logical lsame_64
+      real slamch_64,psnrm2
+      external psnrm2,lsame_64
+      external slamch_64
 #ifdef _OPENMP
       integer omp_get_thread_num, omp_get_num_threads
       external omp_get_thread_num, omp_get_num_threads
@@ -163,11 +163,11 @@ c     %-------------%
 c     %---------------------------------%
 c     | Set machine dependent constants |
 c     %---------------------------------%
-      eps = slamch('e')
+      eps = slamch_64('e')
       eps34 = eps**(3.0/4.0)
       epsn = real(max(m,n))*eps/2.0
       epsn2 = sqrt(real(max(m,n)))*eps/2.0
-      sfmin = slamch('s')
+      sfmin = slamch_64('s')
       
 
 c     %--------------------------------%
@@ -223,8 +223,8 @@ c     %---------------------------------------------------%
 c     %---------------------------------------------%
 c     | Compute and analyze SVD(B) and error bounds |
 c     %---------------------------------------------%
-         call scopy(dim, work(ialpha),1,work(ialpha1),1)
-         call scopy(dim, work(ibeta),1,work(ibeta1),1)
+         call scopy_64(dim, work(ialpha),1,work(ialpha1),1)
+         call scopy_64(dim, work(ibeta),1,work(ibeta1),1)
          call szero(dim+1,work(ibnd),1)
 
          call second(t2)
@@ -232,7 +232,7 @@ c     %---------------------------------------------%
      c        work(ibeta1),work(ibnd+dim-1),work(ibnd+dim),
      c        work(ip),dim+1)
          
-         call sbdsqr('u',dim,0,1,0,work(ialpha1),work(ibeta1),work,1,
+         call sbdsqr_64('u',dim,0,1,0,work(ialpha1),work(ibeta1),work,1,
      c        work(ibnd),1,work,1,work(iwrk),lapinfo)
          call  second(t3)
          tbsvd = tbsvd + (t3-t2)
@@ -251,7 +251,7 @@ c            write (*,*) 'bnd(',i,') = ',work(ibnd+i-1)
 c     %---------------------------------------------%
 c     | Refine error bounds using the "Gap theorem" |
 c     %---------------------------------------------%
-         if (lsame(which,'s')) then
+         if (lsame_64(which,'s')) then
             call srefinebounds(min(m,n),dim,work(ialpha1),work(ibnd),
      c           epsn*anorm,eps34) 
          else
@@ -268,7 +268,7 @@ c     %----------------------------------------------------%
 c         do i=1,min(dim,neig)
 c            write(*,*)  iter,i,work(ialpha1+i-1),work(ibnd+i-1)
 c         enddo
-         if (lsame(which,'s')) then
+         if (lsame_64(which,'s')) then
             i = dim-neig+1
             nconv = 0
             do while(i.le.dim)
@@ -327,7 +327,7 @@ c     %---------------------------------------------------------------------%
             call second(t2)
             call szero(dim-k,work(ishift),1)
             nshft = 0
-            if (lsame(which,'s')) then
+            if (lsame_64(which,'s')) then
                do i=1,k
                   relgap = (work(ialpha1+i-1)-work(ibnd+i-1) -
      c                 work(ialpha1+dim-neig-1))
@@ -413,12 +413,12 @@ c$OMP END PARALLEL
       enddo
 
  50   if ((nconv.ge.neig .or. info.gt.0) .and. 
-     c     (lsame(jobu,'y') .or. lsame(jobv,'y'))) then
+     c     (lsame_64(jobu,'y') .or. lsame_64(jobv,'y'))) then
 c     %-----------------------------------------%
 c     | Calculate singular vectors if requested %
 c     %-----------------------------------------%
-         call scopy(dim, work(ialpha),1,work(ialpha1),1)
-         call scopy(dim, work(ibeta),1,work(ibeta1),1)
+         call scopy_64(dim, work(ialpha),1,work(ialpha1),1)
+         call scopy_64(dim, work(ibeta),1,work(ibeta1),1)
          lwrk = lwrk + dim**2 + (dim+1)**2
          call sritzvec(which, jobu,jobv,m,n,nconv,dim,work(ialpha1),
      c        work(ibeta1),work(ialpha1),U,ldu,V,ldv,work(ip),

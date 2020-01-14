@@ -18,7 +18,7 @@ c
       if (m.gt.ldb) stop 'm>ldb in DGEMM_OVWR'
       blocksize = int(ldwork/m)
       do i=1,n-blocksize+1,blocksize
-         call dgemm(transa,'N',m,blocksize,k,alpha,A,lda,
+         call dgemm_64(transa,'N',m,blocksize,k,alpha,A,lda,
      c              B(1,i),ldb,0D0,dwork,m)
          if (beta.eq.0D0) then
             do j=0,blocksize-1
@@ -34,7 +34,7 @@ c
             enddo
          endif
       enddo
-      call dgemm(transa,'N',m,n-i+1,k,alpha,A,lda,
+      call dgemm_64(transa,'N',m,n-i+1,k,alpha,A,lda,
      c           B(1,i),ldb,0D0,dwork,m)
       if (beta.eq.0D0) then
          do j=0,n-i
@@ -68,7 +68,7 @@ c
       if (ldwork.lt.n) stop 'Too little workspace in DGEMM_OVWR_LEFT'
       blocksize = int(ldwork/n)
       do i=1,m-blocksize+1,blocksize
-         call dgemm('n',transb,blocksize,n,k,alpha,A(i,1),lda,
+         call dgemm_64('n',transb,blocksize,n,k,alpha,A(i,1),lda,
      c              B,ldb,0d0,dwork,blocksize)
          do j=0,n-1
             do l=0,blocksize-1
@@ -76,7 +76,7 @@ c
             enddo
          enddo
       enddo
-      call dgemm('n',transb,m-i+1,n,k,alpha,A(i,1),lda,
+      call dgemm_64('n',transb,m-i+1,n,k,alpha,A(i,1),lda,
      c           B,ldb,0d0,dwork,m-i+1)
       do j=0,n-1
          do l=0,m-i

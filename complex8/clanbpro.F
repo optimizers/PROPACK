@@ -140,10 +140,10 @@ c     %----------------------%
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      real slamch,psnrm2,psdot,slapy2,pscnrm2
+      real slamch_64,psnrm2,psdot,slapy2_64,pscnrm2
       complex pcdotc
       external psnrm2,psdot,pscnrm2,pcdotc
-      external slamch,slapy2
+      external slamch_64,slapy2_64
 
 c-------------------- Here begins executable code ---------------------
       call second(t1)
@@ -151,11 +151,11 @@ c-------------------- Here begins executable code ---------------------
 c     %---------------------------------%
 c     | Set machine dependent constants |
 c     %---------------------------------%
-      eps = slamch('e')
+      eps = slamch_64('e')
       eps34 = eps**(3.0/4.0)
       epsn = real(max(m,n))*eps
       epsn2 = sqrt(real(max(m,n)))*eps
-      sfmin = slamch('s')
+      sfmin = slamch_64('s')
       
 c     %------------------------%
 c     | Set default parameters |
@@ -178,7 +178,7 @@ c     %------------------------%
       if (soption(3).gt.zero) then
          anorm = soption(3)
       else if (k0.gt.0) then
-         anorm = slapy2(B(1,1),B(1,2))
+         anorm = slapy2_64(B(1,1),B(1,2))
          if (anorm.le.zero) then
             ierr = -1
             goto 9999         
@@ -492,7 +492,7 @@ c     %----------------------------%
 c     | Update estimate of ||A||_2 |         
 c     %----------------------------%
          if (j.le.1) then
-            a1 = slapy2(B(1,1), B(1,2))
+            a1 = slapy2_64(B(1,1), B(1,2))
          else
             a1 = B(j,1)/amax
             a1 = amax*sqrt(a1**2 + (B(j,2)/amax)**2 +
@@ -705,29 +705,29 @@ c     %-----------------%
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      real slamch,slapy2
-      external slamch,slapy2
+      real slamch_64,slapy2_64
+      external slamch_64,slapy2_64
 
       call second(t1)
       if (j.eq.1) then
-         d = eps1*(slapy2(alpha(j), beta(j)) + alpha(1)) + eps1*anorm
+         d = eps1*(slapy2_64(alpha(j), beta(j)) + alpha(1)) + eps1*anorm
          mu(1) = eps1/beta(1)
          mumax = abs(mu(1))
       else
          mu(1) = alpha(1)*nu(1)-alpha(j)*mu(1)
-         d = eps1*(slapy2(alpha(j), beta(j)) + alpha(1)) + eps1*anorm
+         d = eps1*(slapy2_64(alpha(j), beta(j)) + alpha(1)) + eps1*anorm
          mu(1) = (mu(1) + sign(d,mu(1))) / beta(j)
          mumax = abs(mu(1))
          do k=2,j-1
             mu(k) = alpha(k)*nu(k) +beta(k-1)*nu(k-1)-alpha(j)*mu(k)
-            d = eps1*(slapy2(alpha(j), beta(j)) + 
-     c           slapy2(alpha(k), beta(k-1))) + eps1*anorm
+            d = eps1*(slapy2_64(alpha(j), beta(j)) + 
+     c           slapy2_64(alpha(k), beta(k-1))) + eps1*anorm
             mu(k) = (mu(k) + sign(d,mu(k))) / beta(j)
             mumax = max(mumax,abs(mu(k)))
          enddo
          mu(j) = beta(j-1)*nu(j-1)
-         d = eps1*(slapy2(alpha(j), beta(j)) + 
-     c        slapy2(alpha(j), beta(j-1))) + eps1*anorm
+         d = eps1*(slapy2_64(alpha(j), beta(j)) + 
+     c        slapy2_64(alpha(j), beta(j-1))) + eps1*anorm
          mu(j) = (mu(j) + sign(d,mu(j))) / beta(j)
          mumax = max(mumax,abs(mu(j)))
       endif
@@ -765,16 +765,16 @@ c     %-----------------%
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
-      real slamch,slapy2
-      external slamch,slapy2
+      real slamch_64,slapy2_64
+      external slamch_64,slapy2_64
 
       call second(t1)
       if (j.gt.1) then
          numax = zero
          do k=1,j-1
             nu(k) = beta(k)*mu(k+1) + alpha(k)*mu(k) -beta(j-1)*nu(k)
-            d = eps1*(slapy2(alpha(k),beta(k)) +
-     c           slapy2(alpha(j),beta(j-1))) + eps1*anorm
+            d = eps1*(slapy2_64(alpha(k),beta(k)) +
+     c           slapy2_64(alpha(j),beta(j-1))) + eps1*anorm
             nu(k) = (nu(k) + sign(d,nu(k))) / alpha(j)
             numax = max(numax,abs(nu(k)))
          enddo
