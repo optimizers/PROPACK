@@ -171,8 +171,8 @@ c     Classical Gram-Schmidt: vnew = vnew - V(:,p:q)*(V(:,p:q)'*vnew)
             if (tid.eq.nt-1) then
                cnk = n-st+1
             endif
-            call zgemv('C',cnk,l,dcmplx(1d0,0d0),V(st,p),ld,vnew(st),1,
-     c           dcmplx(0d0,0d0),ylocal,1)
+            call zgemv('C',cnk,l,dcmplx(1d0,0d0),V(st,p),ld,
+     c           vnew(st),1,dcmplx(0d0,0d0),ylocal,1)
 
             if (tid.eq.0) then
                do j=1,l
